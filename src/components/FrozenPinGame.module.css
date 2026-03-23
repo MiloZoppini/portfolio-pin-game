@@ -813,8 +813,15 @@
     display: none;
   }
 
-  .pinBtnTop,
+  .pinBtnTop {
+    top: 10%;
+    width: 58%;
+    padding: 12px;
+  }
+
   .pinBtnBottom {
-    width: 56%;
+    top: 42%;
+    width: 58%;
+    padding: 12px;
   }
 }
