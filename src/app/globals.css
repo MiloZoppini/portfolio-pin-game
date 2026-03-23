@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+html {
+  background: #081527;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body), sans-serif;
+  background: #081527;
+  color: #ffffff;
+}
+
+main {
+  width: 100%;
+  height: 100%;
+}
+
+button {
+  font: inherit;
+}
+
+img {
+  user-select: none;
+}
+
+::selection {
+  background: rgba(255, 211, 122, 0.85);
+  color: #10223b;
+}

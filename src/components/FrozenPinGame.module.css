@@ -1,0 +1,820 @@
+/* ═══════════════════════════════════════
+   Scene & Background
+   ═══════════════════════════════════════ */
+
+.scene {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #07192b;
+  cursor: none;
+}
+
+.shake {
+  animation: screenShake 500ms ease-out;
+}
+
+.background {
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.12);
+  filter: blur(18px) brightness(0.68) saturate(1.08);
+}
+
+.backgroundGlow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 84% 24%, rgba(72, 214, 255, 0.16), transparent 16%),
+    radial-gradient(circle at 16% 18%, rgba(66, 122, 255, 0.3), transparent 32%);
+  pointer-events: none;
+}
+
+.backgroundShade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(4, 10, 26, 0.12), rgba(4, 10, 26, 0.38)),
+    radial-gradient(circle at center, transparent 42%, rgba(5, 12, 28, 0.22) 100%);
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════
+   Playfield (centered container)
+   ═══════════════════════════════════════ */
+
+.playfield {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: min(100vw, calc(100vh * 0.562637));
+  height: 100vh;
+  overflow: hidden;
+}
+
+.playfieldBackground {
+  object-fit: cover;
+  object-position: 50% 50%;
+  transform: scale(1.08);
+}
+
+.playfieldVignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 76% 25%, rgba(86, 225, 255, 0.2), transparent 18%),
+    linear-gradient(180deg, rgba(16, 24, 46, 0.08), rgba(11, 19, 37, 0.18)),
+    radial-gradient(circle at 50% 40%, transparent 48%, rgba(6, 10, 23, 0.16) 100%);
+  pointer-events: none;
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* ═══════════════════════════════════════
+   Ambient Particles
+   ═══════════════════════════════════════ */
+
+.ambientLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.ambientParticle {
+  position: absolute;
+  top: var(--particle-top);
+  left: var(--particle-left);
+  width: var(--particle-size);
+  height: var(--particle-size);
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.96) 0%, rgba(188, 235, 255, 0.55) 55%, rgba(188, 235, 255, 0) 100%);
+  box-shadow: 0 0 16px rgba(174, 230, 255, 0.38);
+  opacity: 0;
+  animation: driftParticle var(--particle-duration) ease-in-out infinite;
+  animation-delay: var(--particle-delay);
+}
+
+.ambientParticle::after {
+  position: absolute;
+  inset: -180%;
+  background:
+    linear-gradient(90deg, transparent 48%, rgba(255, 255, 255, 0.65) 50%, transparent 52%),
+    linear-gradient(180deg, transparent 48%, rgba(255, 255, 255, 0.65) 50%, transparent 52%);
+  opacity: 0.45;
+  content: "";
+}
+
+/* ═══════════════════════════════════════
+   INTRO PHASE
+   ═══════════════════════════════════════ */
+
+.introWrap {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 6%;
+  gap: 1.5rem;
+  animation: fadeIn 600ms ease-out;
+}
+
+.introCharacter {
+  position: relative;
+  width: 38%;
+  max-width: 260px;
+}
+
+.introCharacterImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 18px 30px rgba(18, 24, 48, 0.3));
+  animation: introCharBob 3s ease-in-out infinite;
+}
+
+.speechBubble {
+  position: absolute;
+  top: -8%;
+  right: -20%;
+  z-index: 12;
+  background: white;
+  color: #333;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  font-weight: 700;
+  padding: 0.7rem 1.3rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  animation: bubblePop 500ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.speechBubble::after {
+  content: "";
+  position: absolute;
+  left: 16%;
+  bottom: -10px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+  transform: rotate(10deg);
+}
+
+.playButton {
+  z-index: 12;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ffe066 0%, #ffb300 100%);
+  color: #5a3600;
+  padding: 1rem 3rem;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(255, 179, 0, 0.35), 0 2px 0 #e6a200;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+  animation: playBtnPulse 2s ease-in-out infinite;
+}
+
+.playButton:hover {
+  transform: scale(1.06);
+  box-shadow: 0 12px 36px rgba(255, 179, 0, 0.5), 0 2px 0 #e6a200;
+}
+
+.playButton:active {
+  transform: scale(0.95);
+}
+
+/* ═══════════════════════════════════════
+   GAME PHASE — Board
+   ═══════════════════════════════════════ */
+
+.boardWrap {
+  position: absolute;
+  top: 1%;
+  left: 18%;
+  z-index: 9;
+  width: 72%;
+  aspect-ratio: 1406 / 1856;
+  transform-origin: center center;
+  filter: drop-shadow(0 22px 36px rgba(20, 18, 44, 0.34));
+  animation: boardSlideIn 500ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+.boardImage {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ═══════════════════════════════════════
+   Coins on Board
+   ═══════════════════════════════════════ */
+
+.coinGroup {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.coinItem {
+  position: absolute;
+  width: 12%;
+  transform: rotate(var(--coin-rot));
+  filter: drop-shadow(0 4px 8px rgba(100, 60, 10, 0.3));
+}
+
+.coinImage {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Coins fall from top section to mid */
+.coinsFallToMid .coinItem {
+  animation: coinFallDown 600ms ease-in forwards;
+  animation-delay: var(--coin-delay);
+}
+
+/* Coins appear in mid section */
+.coinAppear {
+  opacity: 0;
+  animation: coinBounceIn 400ms ease-out forwards;
+  animation-delay: var(--coin-delay);
+}
+
+/* Coins fall from mid to bucket (off screen) */
+.coinsFallToBucket .coinItem {
+  animation: coinFallOff 700ms ease-in forwards !important;
+  animation-delay: var(--coin-delay) !important;
+}
+
+/* ═══════════════════════════════════════
+   Pins
+   ═══════════════════════════════════════ */
+
+.pinBtn {
+  position: absolute;
+  z-index: 14;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 350ms ease, opacity 300ms ease, filter 200ms ease;
+}
+
+.pinBtn:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.pinImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.25));
+}
+
+.pinActive {
+  opacity: 1 !important;
+  filter: drop-shadow(0 0 12px rgba(255, 220, 80, 0.7));
+  animation: pinWiggle 1.5s ease-in-out infinite;
+}
+
+.pinActive:hover {
+  filter: drop-shadow(0 0 20px rgba(255, 220, 80, 0.9));
+  transform: scale(1.08);
+}
+
+.pinActive:active {
+  transform: scale(0.92);
+}
+
+/* Pin top: crosses the channel at the right-side notch, ring sticks out right */
+.pinBtnTop {
+  top: 13%;
+  right: 37%;
+  width: 52%;
+}
+
+/* Pin bottom: crosses the channel in the middle, ring sticks out left */
+.pinBtnBottom {
+  top: 47%;
+  left: 0%;
+  width: 52%;
+}
+
+.pinPulledRight {
+  transform: translateX(80%) scale(0.5);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.pinPulledLeft {
+  transform: translateX(-80%) scale(0.5);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════
+   Character (bucket phase)
+   ═══════════════════════════════════════ */
+
+.characterWrap {
+  position: absolute;
+  bottom: 2%;
+  left: 8%;
+  z-index: 6;
+  width: 34%;
+  animation: charSlideIn 500ms ease-out forwards;
+}
+
+.characterBounce {
+  animation: characterCelebrate 600ms ease-in-out 3;
+}
+
+.characterImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 18px 26px rgba(18, 24, 48, 0.24));
+}
+
+.characterWinSwap {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0;
+  margin-bottom: 0;
+  animation: charSwapIn 500ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Score bubble — positioned on the bucket the character holds */
+.scoreBubble {
+  position: absolute;
+  top: 21%;
+  left: 46%;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  width: 34%;
+  aspect-ratio: 1.18 / 1;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #fff6df 0%, #f7e6b8 100%);
+  color: #8b5c1d;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1rem, 1.8vw, 1.6rem);
+  font-weight: 700;
+  box-shadow: 0 8px 18px rgba(76, 55, 16, 0.18);
+  transition: transform 200ms ease;
+}
+
+.scorePop {
+  animation: scoreBounce 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.scoreBubble::after {
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  width: 18px;
+  height: 18px;
+  background: #f7e6b8;
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+  content: "";
+  transform: translateX(-50%);
+}
+
+
+/* ═══════════════════════════════════════
+   Tutorial Hints
+   ═══════════════════════════════════════ */
+
+.hintOverlay {
+  position: absolute;
+  z-index: 18;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  animation: hintBob 1.8s ease-in-out infinite;
+}
+
+.hintPin1 {
+  top: 15%;
+  right: 38%;
+}
+
+.hintPin2 {
+  top: 27%;
+  left: 10%;
+}
+
+.hintPulse {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  border: 3px solid rgba(255, 220, 80, 0.8);
+  animation: hintPulseRing 1.6s ease-out infinite;
+}
+
+.hintText {
+  background: rgba(0, 0, 0, 0.7);
+  color: #ffe47a;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  backdrop-filter: blur(6px);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ═══════════════════════════════════════
+   Win Badge
+   ═══════════════════════════════════════ */
+
+.winBadge {
+  position: absolute;
+  top: 6%;
+  left: 50%;
+  z-index: 20;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ffe89a 0%, #ffd54f 50%, #ffb300 100%);
+  color: #6d4000;
+  padding: 0.72rem 1.6rem;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 14px 28px rgba(56, 32, 2, 0.25), 0 0 40px rgba(255, 215, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.winBadgeAnimate {
+  animation: badgePopIn 600ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.winStar {
+  font-size: 1.2em;
+  color: #ff8f00;
+  animation: starSpin 2s linear infinite;
+}
+
+/* ═══════════════════════════════════════
+   UI Elements
+   ═══════════════════════════════════════ */
+
+.resetButton {
+  position: absolute;
+  top: max(16px, env(safe-area-inset-top));
+  left: max(16px, env(safe-area-inset-left));
+  z-index: 20;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(6, 15, 37, 0.34);
+  color: rgba(255, 255, 255, 0.94);
+  padding: 0.78rem 1.12rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: background 180ms ease, transform 120ms ease;
+}
+
+.resetButton:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: scale(1.05);
+}
+
+.resetButton:active {
+  transform: scale(0.95);
+}
+
+/* ═══════════════════════════════════════
+   Confetti
+   ═══════════════════════════════════════ */
+
+.confettiLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confettiPiece {
+  position: absolute;
+  top: -5%;
+  left: var(--confetti-x);
+  width: 10px;
+  height: 10px;
+  background: var(--confetti-color);
+  border-radius: 2px;
+  opacity: 0;
+  animation: confettiFall var(--confetti-duration) ease-in forwards;
+  animation-delay: var(--confetti-delay);
+}
+
+.confettiPiece:nth-child(odd) {
+  width: 8px;
+  height: 14px;
+  border-radius: 999px;
+}
+
+.confettiPiece:nth-child(3n) {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+}
+
+/* ═══════════════════════════════════════
+   Burst Particles
+   ═══════════════════════════════════════ */
+
+.bucketBurst {
+  position: absolute;
+  top: 74%;
+  left: 26%;
+  z-index: 13;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.bucketParticle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  margin-top: -5px;
+  border-radius: 999px;
+  background: radial-gradient(circle, #fff5af 0%, #ffbf4f 72%, #ff8a2f 100%);
+  opacity: 0;
+  animation: burstOut 860ms ease-out forwards;
+  animation-delay: var(--particle-delay);
+}
+
+/* ═══════════════════════════════════════
+   Custom Cursor
+   ═══════════════════════════════════════ */
+
+.mouseHand {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
+  width: clamp(130px, 17vw, 210px);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(-240px, -240px, 0);
+  transition: opacity 160ms ease;
+}
+
+.handImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 16px 24px rgba(18, 22, 43, 0.22));
+}
+
+/* ═══════════════════════════════════════
+   Keyframes
+   ═══════════════════════════════════════ */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes introCharBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes bubblePop {
+  0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+  60% { transform: scale(1.1) rotate(3deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes playBtnPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+@keyframes boardSlideIn {
+  from { transform: translateY(-15%) scale(0.9); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes charSlideIn {
+  from { transform: translateY(30%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pinWiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(3deg); }
+  75% { transform: rotate(-3deg); }
+}
+
+@keyframes coinFallDown {
+  0% { transform: rotate(var(--coin-rot)) translateY(0); opacity: 1; }
+  100% { transform: rotate(var(--coin-rot)) translateY(120%); opacity: 0; }
+}
+
+@keyframes coinBounceIn {
+  0% { opacity: 0; transform: rotate(var(--coin-rot)) translateY(-30px) scale(0.5); }
+  60% { opacity: 1; transform: rotate(var(--coin-rot)) translateY(4px) scale(1.05); }
+  100% { opacity: 1; transform: rotate(var(--coin-rot)) translateY(0) scale(1); }
+}
+
+@keyframes coinFallOff {
+  0% { transform: rotate(var(--coin-rot)) translateY(0); opacity: 1; }
+  100% { transform: rotate(var(--coin-rot)) translateY(250%) scale(0.6); opacity: 0; }
+}
+
+@keyframes coinLandInBucket {
+  0% { opacity: 0; transform: translateY(-40px) scale(0.4) rotate(-20deg); }
+  60% { opacity: 1; transform: translateY(4px) scale(1.1) rotate(5deg); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+}
+
+@keyframes screenShake {
+  0% { transform: translate(0, 0); }
+  15% { transform: translate(-4px, 2px); }
+  30% { transform: translate(3px, -3px); }
+  45% { transform: translate(-2px, 3px); }
+  60% { transform: translate(3px, -1px); }
+  75% { transform: translate(-1px, 2px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes badgePopIn {
+  0% { transform: translateX(-50%) scale(0) rotate(-15deg); opacity: 0; }
+  60% { transform: translateX(-50%) scale(1.15) rotate(3deg); opacity: 1; }
+  100% { transform: translateX(-50%) scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes starSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes hintBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes hintPulseRing {
+  0% { transform: scale(0.8); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+@keyframes characterCelebrate {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-8px) rotate(-3deg); }
+  75% { transform: translateY(-4px) rotate(3deg); }
+}
+
+@keyframes charSwapIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  60% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes scoreBounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+@keyframes confettiFall {
+  0% { opacity: 1; transform: translateY(0) translateX(0) rotate(0deg); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(100vh) translateX(var(--confetti-drift)) rotate(var(--confetti-rotation)); }
+}
+
+@keyframes driftParticle {
+  0% { transform: translate3d(0, 12px, 0) scale(0.7); opacity: 0; }
+  20% { opacity: 0.8; }
+  50% { transform: translate3d(8px, -6px, 0) scale(1); opacity: 0.65; }
+  100% { transform: translate3d(-12px, -26px, 0) scale(0.85); opacity: 0; }
+}
+
+@keyframes burstOut {
+  0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
+  15% { opacity: 1; }
+  100% { transform: translate(var(--particle-x), var(--particle-y)) scale(1); opacity: 0; }
+}
+
+@keyframes pulseTap {
+  0% { transform: scale(0.75); opacity: 0.35; }
+  70% { transform: scale(1.18); opacity: 1; }
+  100% { transform: scale(1.24); opacity: 0; }
+}
+
+/* ═══════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════ */
+
+@media (max-width: 900px) {
+  .playfield {
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .boardWrap {
+    top: 1%;
+    left: 16%;
+    width: 74%;
+  }
+
+  .characterWrap {
+    bottom: 3%;
+    left: 4%;
+    width: 36%;
+  }
+}
+
+@media (max-width: 640px) {
+  .scene {
+    cursor: default;
+  }
+
+  .playfieldBackground {
+    transform: scale(1.1);
+  }
+
+  .resetButton {
+    padding: 0.64rem 0.94rem;
+    font-size: 0.82rem;
+  }
+
+  .winBadge {
+    top: auto;
+    bottom: calc(env(safe-area-inset-bottom) + 14px);
+  }
+
+  .boardWrap {
+    top: 2%;
+    left: 14%;
+    width: 76%;
+  }
+
+  .introCharacter {
+    width: 44%;
+  }
+
+  .characterWrap {
+    bottom: 4%;
+    left: 2%;
+    width: 40%;
+  }
+
+  .hintPin1 {
+    top: 15%;
+    right: 34%;
+  }
+
+  .hintPin2 {
+    top: 27%;
+    left: 8%;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .scene {
+    cursor: default;
+  }
+
+  .mouseHand {
+    display: none;
+  }
+
+  .pinBtnTop,
+  .pinBtnBottom {
+    width: 56%;
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["next", "dev", "--port", "$PORT"],
+      "cwd": "/Users/milozoppini/Documents/New project/portfolio-pin-game",
+      "port": 3001
+    }
+  ]
+}
