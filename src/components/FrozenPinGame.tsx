@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import styles from "./FrozenPinGame.module.css";
 import { useGameSounds } from "./useGameSounds";
 
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const FINAL_SCORE = 100;
 
 /*
@@ -188,12 +189,12 @@ export default function FrozenPinGame() {
   return (
     <main className={`${styles.scene} ${screenShake ? styles.shake : ""}`}>
       {/* Background layers */}
-      <Image fill priority alt="" sizes="100vw" src="/game/background.jpeg" className={styles.background} />
+      <Image fill priority alt="" sizes="100vw" src={`${BASE}/game/background.jpeg`} className={styles.background} />
       <div className={styles.backgroundGlow} />
       <div className={styles.backgroundShade} />
 
       <div className={styles.playfield}>
-        <Image fill priority alt="" sizes="(max-width: 900px) 100vw, 56vh" src="/game/background.jpeg" className={styles.playfieldBackground} />
+        <Image fill priority alt="" sizes="(max-width: 900px) 100vw, 56vh" src={`${BASE}/game/background.jpeg`} className={styles.playfieldBackground} />
         <div className={styles.playfieldVignette} />
 
         {/* Ambient snow/sparkle particles */}
@@ -218,7 +219,7 @@ export default function FrozenPinGame() {
                 <div className={styles.speechBubble}>
                   <span>Ciao!</span>
                 </div>
-                <Image src="/game/character-idle.png" alt="Character" width={800} height={1800} priority className={styles.introCharacterImage} />
+                <Image src={`${BASE}/game/character-idle.png`} alt="Character" width={800} height={1800} priority className={styles.introCharacterImage} />
               </div>
               <button type="button" onClick={handleStart} className={styles.playButton}>
                 Gioca
@@ -261,13 +262,13 @@ export default function FrozenPinGame() {
 
               {/* ── Board with coins & pins ── */}
               <div className={styles.boardWrap}>
-                <Image priority alt="" width={1406} height={1856} src="/game/board-empty.png" className={styles.boardImage} />
+                <Image priority alt="" width={1406} height={1856} src={`${BASE}/game/board-empty.png`} className={styles.boardImage} />
 
                 {/* Coins in top section (visible at stage 1, fall away at stage 2) */}
                 <div className={`${styles.coinGroup} ${styles.coinGroupTop} ${pin1Pulled ? styles.coinsFallToMid : ""}`} aria-hidden="true">
                   {COIN_POSITIONS_TOP.map((coin, i) => (
                     <div key={`ct-${i}`} className={styles.coinItem} style={{ left: `${coin.x}%`, top: `${coin.y}%`, "--coin-rot": `${coin.rot}deg`, "--coin-delay": `${coin.delay}ms` } as React.CSSProperties}>
-                      <Image src="/game/coin.png" alt="" width={80} height={80} className={styles.coinImage} />
+                      <Image src={`${BASE}/game/coin.png`} alt="" width={80} height={80} className={styles.coinImage} />
                     </div>
                   ))}
                 </div>
@@ -277,7 +278,7 @@ export default function FrozenPinGame() {
                   <div className={`${styles.coinGroup} ${styles.coinGroupMid} ${pin2Pulled ? styles.coinsFallToBucket : ""}`} aria-hidden="true">
                     {COIN_POSITIONS_MID.map((coin, i) => (
                       <div key={`cm-${i}`} className={`${styles.coinItem} ${styles.coinAppear}`} style={{ left: `${coin.x}%`, top: `${coin.y}%`, "--coin-rot": `${coin.rot}deg`, "--coin-delay": `${coin.delay}ms` } as React.CSSProperties}>
-                        <Image src="/game/coin.png" alt="" width={80} height={80} className={styles.coinImage} />
+                        <Image src={`${BASE}/game/coin.png`} alt="" width={80} height={80} className={styles.coinImage} />
                       </div>
                     ))}
                   </div>
@@ -291,7 +292,7 @@ export default function FrozenPinGame() {
                   className={`${styles.pinBtn} ${styles.pinBtnTop} ${pin1Pulled ? styles.pinPulledRight : ""} ${pin1Active ? styles.pinActive : ""}`}
                   aria-label="Pull top pin"
                 >
-                  <Image src="/game/pin-top.png" alt="" width={353} height={235} className={styles.pinImage} />
+                  <Image src={`${BASE}/game/pin-top.png`} alt="" width={353} height={235} className={styles.pinImage} />
                 </button>
 
                 {/* Pin Bottom */}
@@ -302,7 +303,7 @@ export default function FrozenPinGame() {
                   className={`${styles.pinBtn} ${styles.pinBtnBottom} ${pin2Pulled ? styles.pinPulledLeft : ""} ${pin2Active ? styles.pinActive : ""}`}
                   aria-label="Pull bottom pin"
                 >
-                  <Image src="/game/pin-bottom.png" alt="" width={554} height={373} className={styles.pinImage} />
+                  <Image src={`${BASE}/game/pin-bottom.png`} alt="" width={554} height={373} className={styles.pinImage} />
                 </button>
               </div>
 
@@ -315,12 +316,12 @@ export default function FrozenPinGame() {
 
                 {/* Before win: character with empty bucket */}
                 {!isWon ? (
-                  <img src="/game/character-bucket.png?v=2" alt="" className={styles.characterImage} />
+                  <img src={`${BASE}/game/character-bucket.png?v=2`} alt="" className={styles.characterImage} />
                 ) : null}
 
                 {/* After win: character with bucket full of money */}
                 {isWon ? (
-                  <img src="/game/character-money.png?v=2" alt="" className={`${styles.characterImage} ${styles.characterWinSwap}`} />
+                  <img src={`${BASE}/game/character-money.png?v=2`} alt="" className={`${styles.characterImage} ${styles.characterWinSwap}`} />
                 ) : null}
               </div>
 
@@ -335,7 +336,7 @@ export default function FrozenPinGame() {
 
           {/* Custom cursor hand */}
           <div ref={mouseHandRef} className={styles.mouseHand} aria-hidden="true">
-            <Image alt="" width={1727} height={981} src="/game/hand.png" className={styles.handImage} />
+            <Image alt="" width={1727} height={981} src={`${BASE}/game/hand.png`} className={styles.handImage} />
           </div>
         </div>
       </div>
